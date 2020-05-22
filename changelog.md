@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+
+  * Adds securedrop-keyring package to list of dependencies.
+
 ## 0.1.1
 
   * Infers hostname from system settings, if no config value found.
