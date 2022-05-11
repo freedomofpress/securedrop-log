@@ -24,3 +24,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
     sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" VERSION
 fi
+
+# Add a new entry to debian/changelog
+DEBFULLNAME="SecureDrop Team"
+DEBEMAIL="securedrop@freedom.press"
+dch --newversion "${NEW_VERSION}" --distribution $(dpkg-parsechangelog -S distribution) "see changelog.md"
