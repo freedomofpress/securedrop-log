@@ -34,6 +34,7 @@ common-steps:
         cd ~/packaging/securedrop-debian-packaging
         export PKG_VERSION=1000.0
         export PKG_PATH=/home/circleci/project/
+        find $PKG_PATH
         make securedrop-log
 
 version: 2
