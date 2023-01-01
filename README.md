@@ -91,3 +91,4 @@ Or use the logger command.
 ```
 logger This line should show in the syslog.log file in the sd-log file.
 ```
+test
