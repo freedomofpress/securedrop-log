@@ -1,0 +1,51 @@
+name: CI
+on: [push, pull_request]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test-bullseye:
+    runs-on: ubuntu-latest
+    container: debian:bullseye
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          apt-get update && apt-get install -y make python3-venv
+          make venv
+      - name: Run tests
+        run: |
+          source .venv/bin/activate
+          make check
+
+  build-bullseye:
+    runs-on: ubuntu-latest
+    container: debian:bullseye
+    steps:
+      - name: Install dependencies (part 1)
+        run: |
+          apt-get update && apt-get install -y make sudo git git-lfs
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - uses: actions/checkout@v3
+        with:
+          path: 'project'
+      - uses: actions/checkout@v3
+        with:
+          repository: "freedomofpress/securedrop-builder"
+          lfs: true
+          path: 'packaging'
+      - name: Install dependencies (part 2)
+        run: |
+          make -C packaging install-deps
+      - name: Ensure that build-requirements.txt and requirements.txt are in sync
+        run: |
+          cd packaging
+          PKG_DIR=../project make requirements
+          cd ../project
+          git diff
+      - name: Build Debian package
+        run: |
+          cd packaging
+          PKG_PATH="$(dirname $(pwd))/project" make securedrop-log
