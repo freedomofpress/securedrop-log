@@ -4,9 +4,9 @@ common-steps:
     run:
       name: Install requirements and run tests
       command: |
-        apt-get update && apt-get install -y make python3-venv
-        make venv
-        source .venv/bin/activate
+        apt-get update && apt-get install -y make python3-pip
+        pip install poetry==1.4.0
+        poetry install --no-ansi
         make check
 
   - &install_packaging_dependencies
